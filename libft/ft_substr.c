@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 19:27:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2023/12/04 11:17:33 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/18 11:42:23 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (start >= ft_strlen(s) || len == 0)
 	{
 		arr = ft_calloc(1, sizeof(char));
+		if (!arr)
+			return (0);
 		return (arr);
 	}
 	if (len > (ft_strlen(s) - start))

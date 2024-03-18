@@ -1,6 +1,6 @@
 NAME = pipex
-CC = CC 
-FLAGS = -Wall -Wextra -Werror
+CC = cc
+FLAGS = -Wall -Wextra -Werror -g
 FILES = pipex.c 0_files_and_commands.c the_pipe.c
 OFILES = $(FILES:.c=.o)
 LIB = lib
