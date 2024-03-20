@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 13:50:45 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/18 16:07:49 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:51:26 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,15 @@ void	ft_clear(int indice, int e_indice, t_d *f)
 {
 	if (indice >= 0)
 	{
+		close(f->fd1);
+		close(f->fd2);
 		split_free(f->cmd1, f->l_cmd1);
 		split_free(f->cmd2, f->l_cmd2);
+	}
+	if (indice >= 1)
+	{
+		free(f->path1);
+		free(f->path2);
 	}
 	exit(e_indice);
 }
@@ -80,32 +87,31 @@ int	it_is_valid_(char *str, t_d *f, char **res)
 		ft_clear(0, 1, f);
 	}
 	free(res1);
-	ft_printf("res2 == %s", res2);
 	if (!ft_strncmp("/bin/", res2, 5))
 		return (free(res2), 1);
 	else
 		return (free(res2), 0);
 }
 
-void	prepare_path(char *str, t_d *f)
+char	*prepare_path(char *str, t_d *f)
 {
 	int	len;
 	(void) f;
 
 	len = split_strlen(str, '/', 0);
-	ft_printf("the len is %d\n", len);
 	if (len == 1)
-	{
-		f->path = ft_strjoin("/bin/", str);
-		if (!f->path)
-			ft_clear(0, 1, f);
-	}
+		return (ft_strjoin("/bin/", str));
 	else if (len == 2)
 	{
-		if(!it_is_valid_(str, f, NULL))
-			ft_clear(0, 1, f);
-		f->path = str;
+		if (str[0] == '/')
+		{
+			if(!it_is_valid_(str, f, NULL))
+				return (0);
+			return (str);
+		}
+		else
+			return (str);
 	}
 	else
-		ft_clear(0, 1, f);
+		return (0);
 }

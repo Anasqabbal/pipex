@@ -1,0 +1,15 @@
+0_files_and_commands.c
+0_files_and_commands.o
+1_prepare_path.c
+Makefile
+f1
+f2
+libft
+pipex
+pipex.c
+pipex.h
+pipex.o
+test.c
+test2.c
+the_pipe.c
+the_pipe.o
