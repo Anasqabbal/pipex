@@ -1,7 +1,16 @@
+.
+..
+.vscode
 Makefile
+a.out
+f1
+f2
+f3
+f4
+libft
+path.c
 pipex
 pipex.c
 pipex.h
-pipex.o
 test.c
 test1.c

@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:51:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/23 17:02:24 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:11:39 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,70 +44,53 @@ void	do_command(char *cmd, char **env)
 		ft_printf("command not found\n");
 		exit(1);
 	}
-	//ft_printf("UUUU\n");
 }
 
-void	child_process_(char *cmd, char **env, int *fd)
+void	child_process_(char *cmd, char **env, int *fd, t_d *f)
 {
 	ft_printf("IN CHILD\n");
 	close (fd[0]);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)// write into
 		ft_printf("error");
-	do_command(cmd, env);
+	if (dup2(f->fd1, STDIN_FILENO) == -1)
+		ft_printf("error");
 	close (fd[1]);
+	do_command(cmd, env);
 }
 
-void parent_process_(char *cmd, char **env, int *fd)
+void parent_process_(char *cmd, char **env, int *fd, t_d *f)
 {
 	ft_printf("IN PARENT\n");
-	// int fileout;
-	// fileout = open(, O_CREAT | O_RDWR, 0777);
-	// dup2(fileout, 1);
 	close (fd[1]);
-//	close (fileout);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 		ft_printf("error");
-	do_command(cmd, env);
+	if (dup2(f->fd2, STDOUT_FILENO) == -1)
+		ft_printf("error");
 	close(fd[0]);
-	//close (fileout);
+	do_command(cmd, env);
 }
 
 int main(int ac, char **av, char **env)
 {
 	t_d f;
-	static int ii;
 	int fd[2];
 	int pid;
-	int pid1;
 
 	if (ac != 5)
 		return (1);
 	else
 	{
-		// f.fd1 = creat_open_file(av[1], 0);
-		// f.fd2 = creat_open_file(av[4], 1);
+		f.fd1 = creat_open_file(av[1], 0);
+		f.fd2 = creat_open_file(av[4], 1);
 		if (pipe(fd) == -1)
 			exit (1);
 		pid = fork();
 		if (pid == -1)
 			exit (1);
 		if (pid == 0)
-		{
-			ft_printf("chi i == %d\n", ii++);
-			child_process_(av[2], env, fd);
-		}
-		pid1 = fork();
-		if (pid1 == 0)
-		{
-			ft_printf("par i == %d\n", ii++);
-			parent_process_(av[3], env, fd);
-		}
-		// waitpid(pid, NULL, 0);
-		// waitpid(pid1, NULL, 0);
-		close(fd[1]);
-		close(fd[0]);
-		wait(NULL);
-		wait(NULL);
+			parent_process_(av[3], env, fd, &f);
+		else
+			child_process_(av[2], env, fd, &f);
 	}
 	return (0);
 }
