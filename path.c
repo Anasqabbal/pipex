@@ -6,33 +6,35 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 11:06:32 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/23 11:44:23 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/26 11:25:22 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	ft_clear(t_d *f)
+{
+	close(f->fd1);
+	close(f->fd2);
+}
+
 char *check_acceess(char *cmd, char *path)
 {
     char *res1;
 
-    if (ft_strlen(ft_strrchr(path, '/')) != 2) /* checki wach lpath f lakhr dyalo / wla la ila makantch zidha 3la lpath */
+    if (ft_strlen(ft_strrchr(path, '/')) != 2)
     {
-        //ft_printf("your should join / at the end\n");
-        path = ft_strjoin(path, "/"); /* zid '/' 3la lpath */
+        path = ft_strjoin(path, "/");
         if (!path)
             return (NULL);
     }
-    res1 = ft_strjoin(path, cmd); /* jma3 lpath w lcommand w checki laccess */
+    res1 = ft_strjoin(path, cmd);
     if (!res1)
         return (NULL);
     if (access(res1, X_OK) == -1)
-    {
-        //ft_printf("-- %s --\n", res1);
         return (free(res1), NULL);
-    }
     else
-        return (res1); /* returni lpath */
+        return (res1);
 }
 
 
