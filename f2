@@ -1,7 +1,0 @@
-Makefile
-pipex
-pipex.c
-pipex.h
-pipex.o
-test.c
-test1.c

@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:51:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/27 16:55:15 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/28 15:47:00 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,18 @@ void	child_process_(char *cmd, char **env, int *fd, t_d *f)
 {
 	close (fd[0]);
 	close(f->fd2);
-	if (dup2(f->fd1, STDIN_FILENO) == -1)
-	{
-		ft_clear(f);
-		exit(1);
-	}
-	close(f->fd1);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
 		ft_clear(f);
 		exit(1);
 	}
 	close (fd[1]);
+	if (dup2(f->fd1, STDIN_FILENO) == -1)
+	{
+		ft_clear(f);
+		exit(1);
+	}
+	close(f->fd1);
 	do_command(cmd, env, f);
 }
 void	fi()
@@ -119,7 +119,7 @@ int main(int ac, char **av, char **env)
 		close(f.fd1);
 		waitpid (pid , NULL, 0);
 		if (pid != 0)
-		{
+		{ 
 			int pid2 = fork();
 			if (pid2 == 0)
 				child1_process_(av[3], env, fd, &f);
