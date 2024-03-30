@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:51:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/28 23:16:02 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/30 15:27:14 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,10 @@ int main(int ac, char **av, char **env)
 		int pid2 = fork();
 		if (pid2 == 0)
 			child1_process_(av[3], env, fd, &f);
-		while(wait(NULL) != -1);
 		close(fd[0]);
 		close(fd[1]);
 		ft_clear(&f);
+		while(wait(NULL) != -1);
 	}
 	return (ft_clear(&f), 0);
 }
