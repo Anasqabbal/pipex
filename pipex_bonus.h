@@ -17,4 +17,5 @@ typedef struct s_p
 int		creat_open_file(char *f1, int ind);
 char	*check__path(char *cmd, char **env);
 void	ft_clear(t_d *f);
+void    clear_pipes(int i, int ***p);
 #endif

@@ -1,79 +1,34 @@
-#include "pipex.h"
+#include "pipex_bonus.h"
+//creat pipes
 
-void	do_child_process(int *fd, char **av, char **env)
+void	creat_pipes(int ***p)
 {
-	int infile;
-	char **split;
 
-	split = ft_split(av[2], ' ');
-	infile = open(av[1], O_RDWR);
-	if (infile == -1)
+}
+
+
+
+int main(int ac, char **av, char **env)
+{
+	int		fd[ac - 3][2];
+	int		pid;
+	int		i;
+
+	i = 0;
+	while (i < ac - 3)
 	{
-		perror("open :");
-		exit(1);
+		if (pipe(fd[i]) == -1)
+			return(ft_printf("pipe failed\n"), 0);
+		pid = fork();
+		if (pid == -1)
+			return(ft_printf("fork failed\n"), 0);		
 	}
-
-	close(fd[0]); // close the reading
-
-	if (dup2(infile, STDIN_FILENO) == -1)
-		ft_printf("error with fd[1]\n");
-	
-	close(infile); //close infile
-
-	if (dup2(fd[1], STDOUT_FILENO) == -1) // writing pipe acts as outputfile (1)
-		ft_printf("error with fd[1]\n");
-	
-	close(fd[1]); //after duplicating close the reading
-
-	if (execve("/bin/ls", split, env) == -1) //execute the command
-		exit(1);
-}
-
-void	do_parent_process(int *fd, char **av, char **env)
-{
-	int outfile;
-	char **split;
-
-	split = ft_split(av[3], ' ');
-
-	outfile = open(av[4], O_RDWR | O_CREAT, 0777);
-	if (outfile == -1)
-		perror(" outfile open :");
-
-	close(fd[1]) ;// close the writing pipe;
-
-	if (dup2(fd[0], STDIN_FILENO) == -1)
-		ft_printf("error with fd[1]\n");
-	close(fd[0]); //close the reading pipe;
-
-
-	if (dup2(outfile, STDOUT_FILENO) == -1)
-		ft_printf("error with fd[1]\n");
-	close(outfile); //close the outfile 
-
-
-	if (execve("/bin/ls", split, env) == -1) //execute the command
-		exit(1);
-}
-
-int	main(int ac, char **av, char **env)
-{
-	int fd[2];
-	int pid;
-
-	if (pipe(fd) == -1)
-		exit(1);
-
 	pid = fork();
-	if (pid == -1)
-	{
-		close(fd[0]);
-		close(fd[1]);
-		exit(1);
-	}
-
-	if (!pid)
-		do_child_process(fd, av, env);
-	else
-		do_parent_process(fd, av, env);
+	if (pid == 0)
+		ft_printf("this is the child \n");
+	else if (pid != 0)
+		ft_printf("this is not the child\n");
+	int pid2 = fork();
+	if (pid2 != 0)
+		ft_printf("the parent of the second fork()\n");
 }

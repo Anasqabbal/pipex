@@ -2,6 +2,7 @@
 # define PIPEX_H
 # include "./libft/libft.h"
 # include <stdio.h>
+# include <unistd.h>
 
 typedef struct s_d
 {
