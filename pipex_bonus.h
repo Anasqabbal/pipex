@@ -9,6 +9,8 @@ typedef struct s_d
 	int		fd2;
 	int		i;
 	int		ac;
+	int		p;
+	int		dup;
 }	t_d;
 
 typedef struct s_p

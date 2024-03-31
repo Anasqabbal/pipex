@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 10:14:33 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/30 16:55:38 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/03/31 16:51:56 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,14 @@ int main(int ac, char **av, char **env)
 	int pid;
 	int pid2;
 
+	f.i = 1;
+	f.p = 0;
 	f.fd1 = creat_open_file(av[1], 0);
 	f.fd2 = creat_open_file(av[ac - 1], 1);
 	f.ac = ac;
 	fd = creat_pipes(ac - 3);
 	if (!fd)
 		return (1);
-	f.i = 1;
 	while (++f.i < ac - 1)
 	{
 		pid = fork();
@@ -85,10 +86,13 @@ int main(int ac, char **av, char **env)
 		}
 		else
 		{
-			clear_pipes(fd, ac - 3);
-			ft_clear(&f);
+			close(fd[f.p][0]);
+			close(fd[f.p][1]);
+			close(f.fd1);
 			while (wait(NULL) != -1);
 		}
+		f.i++;
+		f.p++;
 	}
-	return (0);
+	return (close(f.fd2), 0);
 }
