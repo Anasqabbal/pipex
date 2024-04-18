@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:51:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/30 15:27:14 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:33:44 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	do_command(char *cmd, char **env, t_d *f)
 	}
 	if (execve(path, cmd1, env) == -1)
 	{
+		/*you must free path and cmd1*/
 		ft_clear(f);
 		exit(1);
 	}

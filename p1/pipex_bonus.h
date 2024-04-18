@@ -28,14 +28,13 @@ int		creat_open_file(char *f1, int ind);
 char	*check__path(char *cmd, char **env);
 void	ft_clear(t_d *f);
 
-/* ft_clear_bonus.c */
-void    clear_pipes(int **fd, int i);
-int		**fds_free(int **strings, int j);
+/* ft_clear1_bonus.c */
+void	close_pipes(int i, int *fd);
+
 
 /*do_commands*/
-void	first_command(char *cmd, char **env, int **fd, t_d *f);
-void	last_command(char *cmd, char **env, int **fd, t_d *f);
-void	mid_command(char *cmd, char **env, int **fd, t_d *f);
+void	cmd1_(char *cmd, char **env, t_d *f);
+
 
 /*her_doc_bonus*/
 void	read_from_her_doc(int *fd, char *str, t_d *f);

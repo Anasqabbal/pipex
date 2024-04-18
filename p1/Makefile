@@ -3,7 +3,7 @@ BONUS = pipex_bonus
 CC = cc
 FLAGS = -Wall -Wextra -g
 FILES = pipex.c path.c
-FILESB = ft_clear_bonus.c path_bonus.c pipex1_bonus.c do_command.c her_doc_bonus.c
+FILESB = clear1_bonus.c path_bonus.c pipex1_bonus.c do_command1.c her_doc_bonus.c
 OFILES = $(FILES:.c=.o)
 OFILESB = $(FILESB:.c=.o)
 LIB = lib

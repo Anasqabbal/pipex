@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 10:14:33 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/31 16:51:56 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:29:52 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,48 @@ int main(int ac, char **av, char **env)
 	f.fd1 = creat_open_file(av[1], 0);
 	f.fd2 = creat_open_file(av[ac - 1], 1);
 	f.ac = ac;
-	fd = creat_pipes(ac - 3);
+	fd = creat_pipes(ac - 4);
 	if (!fd)
 		return (1);
-	while (++f.i < ac - 1)
+	while (f.p < ac - 4)
 	{
+		ft_printf("[the pipe is %d]\n", f.p);
+		f.i++;
 		pid = fork();
+		if (pid < 0)
+			ft_printf("error with fork(1)\n");
 		if (pid == 0 && f.i == 2)
+		{
+			ft_printf("command == %s \nnext command == %s\nF1_", av[f.i],  av[f.i + 1]);
 			first_command(av[f.i], env, fd, &f);
+		}
 		else if (pid == 0 && f.i != 2 && f.i != ac - 2)
+		{
+			ft_printf("command == %s \nnext command == %s\nF1_", av[f.i],  av[f.i + 1]);
 			mid_command(av[f.i], env, fd, &f);
+		}
 		else if (pid == 0 && f.i == ac - 2)
+		{
+			ft_printf("command == %s \nnext command == %s\nF1_", av[f.i],  av[f.i + 1]);
 			last_command(av[f.i], env, fd, &f);
+		}
 		pid2 = fork();
+		if (pid2 < 0)
+			ft_printf("error with fork(2)\n");
 		if (pid2 == 0 && f.i + 1 == ac - 2)
+		{
+			ft_printf("command == %s \nnext command == %s\nF2_", av[f.i],  av[f.i + 1]);
 			last_command(av[f.i + 1], env, fd, &f);
+		}
 		else if (pid2 == 0 && f.i + 1 < ac - 2)
+		{
+			ft_printf("command == %s \nnext command == %s\nF2_", av[f.i],  av[f.i + 1]);
 			mid_command(av[f.i + 1], env, fd, &f);
+		}
 		else if  (pid2 == 0 && f.i == ac - 2)
 		{
-			clear_pipes(fd, ac - 3);
+			ft_printf("command == %s \nnext command == %s\nF2_", av[f.i],  av[f.i + 1]);
+			clear_pipes(fd, ac - 4);
 			ft_clear(&f);
 			exit(0);
 		}
@@ -89,8 +111,11 @@ int main(int ac, char **av, char **env)
 			close(fd[f.p][0]);
 			close(fd[f.p][1]);
 			close(f.fd1);
-			while (wait(NULL) != -1);
+			waitpid(pid, NULL, 0);
+			waitpid(pid2, NULL, 0);
 		}
+		if ((ac - 3) % 2 == 0)
+			f.p++;
 		f.i++;
 		f.p++;
 	}

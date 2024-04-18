@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 14:34:02 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/31 16:54:42 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/04/01 14:26:15 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	do_command(char *cmd, char **env, t_d *f)
 
 void	mid_command(char *cmd, char **env, int **fd, t_d *f)
 {
+	ft_printf("MID\n");
 	if (dup2(fd[f->p][0], STDIN_FILENO) == -1)
 	{
 		ft_printf("dup2 failed\n");
@@ -50,13 +51,14 @@ void	mid_command(char *cmd, char **env, int **fd, t_d *f)
 		ft_clear(f);
 		exit(1);
 	}
-	clear_pipes(fd, f->ac - 3);
+	clear_pipes(fd, f->ac - 4);
 	ft_clear(f);
 	do_command(cmd, env, f);
 }
 
 void	first_command(char *cmd, char **env, int **fd, t_d *f)
 {
+	ft_printf("FIRST\n");
 	if (dup2(fd[f->p][1], STDOUT_FILENO) == -1)
 	{
 		ft_printf("dup2 failed \n");
@@ -69,13 +71,14 @@ void	first_command(char *cmd, char **env, int **fd, t_d *f)
 		ft_clear(f);
 		exit(1);
 	}
-	clear_pipes(fd, f->ac - 3);
+	clear_pipes(fd, f->ac - 4);
 	ft_clear(f);
 	do_command(cmd, env, f);
 }
 
 void	last_command(char *cmd, char **env, int **fd, t_d *f)
 {
+	ft_printf("LAST\n");
 	if (dup2(fd[f->p][0], STDIN_FILENO) == -1)
 	{
 		ft_printf("dup2 failed ;;;;\n");
@@ -88,7 +91,7 @@ void	last_command(char *cmd, char **env, int **fd, t_d *f)
 		ft_clear(f);
 		exit(1);
 	}
-	clear_pipes(fd, f->ac - 3);
+	clear_pipes(fd, f->ac - 4);
 	ft_clear(f);
 	do_command(cmd, env, f);
 }
