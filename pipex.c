@@ -6,11 +6,19 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:51:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/04/16 15:33:44 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/06/22 18:20:18 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	close_files(t_p *e)
+{
+	close(e->fd[0]);
+	close(e->fd[1]);
+	close(e->fd0);
+	close(e->fd1);
+}
 
 int	creat_open_file(char *f1, int ind)
 {
@@ -19,106 +27,74 @@ int	creat_open_file(char *f1, int ind)
 	if (ind == 0)
 		fd = open(f1, O_RDONLY);
 	else
-		fd = open(f1, O_CREAT | O_RDWR, 0777);
+	{
+		fd = open(f1, O_CREAT | O_RDWR, 0644);
+		if (ft_strncmp(f1, "/dev/stdin", 10) == 0)
+			fd = -1;
+	}
 	if (fd < 0)
 	{
-		perror("open");
-		exit (1);
+		ft_putstr_fd("pipex: ", 2);
+		perror(f1);
+		fd = -1;
 	}
 	return (fd);
 }
 
-void	do_command(char *cmd, char **env, t_d *f)
+int	ft_execve1(t_p *e, int in, int out, int i)
 {
-	char *path;
-	char **cmd1;
-
-	cmd1 = ft_split(cmd,  ' ');
-	if (!cmd1)
+	e->pid = fork();
+	if (e->pid < 0)
+		return (perror("fork"), 1);
+	if (e->pid == 0)
 	{
-		ft_clear(f);
-		exit (1);
+		if (i == 2)
+			close(e->fd[0]);
+		else if (i == 3)
+			close(e->fd[1]);
+		if ((in == -1 && i == 2) || (i == 3 && out == -1))
+			exit (1);
+		if (dup2(in, STDIN_FILENO) < 0)
+			return (perror("dup2"), 1);
+		if (dup2(out, STDOUT_FILENO) < 0)
+			return (perror("dup2"), 1);
+		close_files(e);
+		do_command(e->av[i], e->env, e);
 	}
-	path = check__path(cmd1[0] , env);
-	if (!path)
-	{
-		ft_clear(f);
-		exit (1);
-	}
-	if (execve(path, cmd1, env) == -1)
-	{
-		/*you must free path and cmd1*/
-		ft_clear(f);
-		exit(1);
-	}
+	return (0);
 }
 
-void	child_process_(char *cmd, char **env, int *fd, t_d *f)
+void	init_struct(int ac, char **av, char **env, t_p *e)
 {
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
-	{
-		ft_clear(f);
-		exit(1);
-	}
-	if (dup2(f->fd1, STDIN_FILENO) == -1)
-	{
-		ft_clear(f);
-		exit(1);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	ft_clear(f);
-	do_command(cmd, env, f);
-}
-void	fi()
-{
-	system("leaks pipex");
+	e->fd0 = creat_open_file(av[1], 0);
+	e->fd1 = creat_open_file(av[4], 1);
+	e->env = env;
+	e->ac = ac;
+	e->av = av;
 }
 
-void child1_process_(char *cmd, char **env, int *fd, t_d *f)
+int	main(int ac, char **av, char **env)
 {
-	if (dup2(fd[0], STDIN_FILENO) == -1)
-	{
-		ft_clear(f);
-		exit(1);
-	}
-	if (dup2(f->fd2, STDOUT_FILENO) == -1)
-	{
-		ft_clear(f);
-		exit(1);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	ft_clear(f);
-	do_command(cmd, env, f);
-}
-
-int main(int ac, char **av, char **env)
-{
-	t_d f;
-	int fd[2];
-	int pid;
+	t_p	e;
+	int	status;
 
 	if (ac != 5)
-		return (1);
+		return (ft_putstr_fd("invalid arguments\n", 2), EXIT_FAILURE);
 	else
 	{
-		f.fd1 = creat_open_file(av[1], 0);
-		f.fd2 = creat_open_file(av[4], 1);
-		if (pipe(fd) == -1)
-			exit (1);
-		pid = fork();
-		if (pid == -1)
-			return (ft_clear(&f), 1);
-		if (pid == 0)
-			child_process_(av[2], env, fd, &f);
-		int pid2 = fork();
-		if (pid2 == 0)
-			child1_process_(av[3], env, fd, &f);
-		close(fd[0]);
-		close(fd[1]);
-		ft_clear(&f);
-		while(wait(NULL) != -1);
+		init_struct(ac, av, env, &e);
+		if (pipe(e.fd) == -1)
+			return (perror("pipe"), 1);
+		if (!ft_execve1(&e, e.fd0, e.fd[1], 2))
+		{
+			if (ft_execve1(&e, e.fd[0], e.fd1, 3))
+				return (close_files(&e), 1);
+		}
+		else
+			return (close_files(&e), 1);
+		close_files(&e);
+		while (waitpid(-1, &status, 0) != -1)
+			;
 	}
-	return (ft_clear(&f), 0);
+	return (WEXITSTATUS(status));
 }

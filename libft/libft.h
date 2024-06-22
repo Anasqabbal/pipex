@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 20:09:28 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/03/25 19:58:32 by marvin           ###   ########.fr       */
+/*   Updated: 2024/03/10 15:56:25 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@
 # include <fcntl.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
-# endif
-# ifndef OPEN_MAX
-#  define OPEN_MAX 100
 # endif
 
 int		ft_isalpha(int c);
