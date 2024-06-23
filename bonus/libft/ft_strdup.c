@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 16:11:06 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/06/22 18:14:35 by anqabbal         ###   ########.fr       */
+/*   Created: 2023/11/02 19:17:14 by anqabbal          #+#    #+#             */
+/*   Updated: 2023/12/05 09:57:08 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include "./libft/libft.h"
-# include <stdio.h>
+#include "libft.h"
 
-typedef struct s_p
+char	*ft_strdup(const char *s1)
 {
-	int		pid;
-	int		fd[2];
-	int		fd0;
-	int		fd1;
-	char	**env;
-	char	**av;
-	int		ac;
-}	t_p;
+	int		len;
+	char	*arr;
 
-int		creat_open_file(char *f1, int ind);
-char	*check__path(char *cmd, char **env);
-void	close_files(t_p *e);
-void	do_command(char *cmd, char **env, t_p *e);
-#endif
+	len = ft_strlen(s1);
+	arr = malloc((len + 1) * (sizeof (char)));
+	if (!arr)
+		return (0);
+	ft_memcpy(arr, s1, len);
+	arr[len] = '\0';
+	return (arr);
+}

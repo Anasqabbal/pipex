@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 16:11:06 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/06/22 18:14:35 by anqabbal         ###   ########.fr       */
+/*   Created: 2023/10/31 18:32:47 by anqabbal          #+#    #+#             */
+/*   Updated: 2023/11/30 21:16:33 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include "./libft/libft.h"
-# include <stdio.h>
+#include "libft.h"
 
-typedef struct s_p
+void	ft_putnbr_fd(int n, int fd)
 {
-	int		pid;
-	int		fd[2];
-	int		fd0;
-	int		fd1;
-	char	**env;
-	char	**av;
-	int		ac;
-}	t_p;
+	unsigned int	nb;
+	int				tmp;
 
-int		creat_open_file(char *f1, int ind);
-char	*check__path(char *cmd, char **env);
-void	close_files(t_p *e);
-void	do_command(char *cmd, char **env, t_p *e);
-#endif
+	if (fd < 0)
+		return ;
+	tmp = 0;
+	nb = n;
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		nb = n * -1;
+	}
+	if (nb > 9)
+	{
+		ft_putnbr_fd(nb / 10, fd);
+		ft_putnbr_fd(nb % 10, fd);
+	}
+	if (nb >= 0 && nb <= 9)
+	{
+		tmp = nb + 48;
+		ft_putchar_fd(tmp, fd);
+	}
+}

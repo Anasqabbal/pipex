@@ -6,7 +6,7 @@
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:51:31 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/06/22 18:20:18 by anqabbal         ###   ########.fr       */
+/*   Updated: 2024/06/23 11:03:39 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,31 @@
 
 void	close_files(t_p *e)
 {
-	close(e->fd[0]);
-	close(e->fd[1]);
-	close(e->fd0);
-	close(e->fd1);
+	if (e->fd[0] != -1)
+		close(e->fd[0]);
+	if (e->fd[1] != -1)
+		close(e->fd[1]);
+	if (e->fd0 != -1)
+		close(e->fd0);
+	if (e->fd1 != -1)
+		close(e->fd1);
 }
 
 int	creat_open_file(char *f1, int ind)
 {
 	int	fd;
 
+	if (ft_strncmp(f1, "/dev/stdin", 10) == 0 && ind != 0)
+	{
+		ft_putstr_fd("pipex: /dev/stdin:", 2);
+		ft_putendl_fd(" Permission denied", 2);
+		return (fd = -1, fd);
+	}
 	if (ind == 0)
 		fd = open(f1, O_RDONLY);
 	else
 	{
 		fd = open(f1, O_CREAT | O_RDWR, 0644);
-		if (ft_strncmp(f1, "/dev/stdin", 10) == 0)
-			fd = -1;
 	}
 	if (fd < 0)
 	{

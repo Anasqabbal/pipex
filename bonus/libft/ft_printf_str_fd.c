@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_printf_str_fd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 16:11:06 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/06/22 18:14:35 by anqabbal         ###   ########.fr       */
+/*   Created: 2023/12/05 10:45:16 by anqabbal          #+#    #+#             */
+/*   Updated: 2024/02/27 12:05:02 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include "./libft/libft.h"
-# include <stdio.h>
+#include "libft.h"
 
-typedef struct s_p
+int	ft__putstr_fd(char *s, int fd)
 {
-	int		pid;
-	int		fd[2];
-	int		fd0;
-	int		fd1;
-	char	**env;
-	char	**av;
-	int		ac;
-}	t_p;
+	int	i;
 
-int		creat_open_file(char *f1, int ind);
-char	*check__path(char *cmd, char **env);
-void	close_files(t_p *e);
-void	do_command(char *cmd, char **env, t_p *e);
-#endif
+	i = 0;
+	if (fd < 0)
+		return (-1);
+	else if (!s)
+	{
+		ft_putstr_fd("(null)", 1);
+		return (6);
+	}
+	while (*(s + i))
+	{
+		ft_putchar_fd(*(s + i), fd);
+		i++;
+	}
+	return (i);
+}

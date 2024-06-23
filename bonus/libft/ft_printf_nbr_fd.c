@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_printf_nbr_fd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 16:11:06 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/06/22 18:14:35 by anqabbal         ###   ########.fr       */
+/*   Created: 2023/12/05 10:47:55 by anqabbal          #+#    #+#             */
+/*   Updated: 2024/02/27 12:06:11 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include "./libft/libft.h"
-# include <stdio.h>
+#include "libft.h"
 
-typedef struct s_p
+int	ft__putnbr_fd(int n, int fd)
 {
-	int		pid;
-	int		fd[2];
-	int		fd0;
-	int		fd1;
-	char	**env;
-	char	**av;
-	int		ac;
-}	t_p;
+	unsigned int	nb;
+	int				count;
 
-int		creat_open_file(char *f1, int ind);
-char	*check__path(char *cmd, char **env);
-void	close_files(t_p *e);
-void	do_command(char *cmd, char **env, t_p *e);
-#endif
+	count = 0;
+	if (fd < 0)
+		return (-1);
+	nb = n;
+	if (n < 0)
+	{
+		count += ft__putchar_fd('-', fd);
+		nb = n * -1;
+	}
+	if (nb > 9)
+	{
+		count += ft__putnbr_fd(nb / 10, fd);
+		count += ft__putnbr_fd(nb % 10, fd);
+	}
+	if (nb >= 0 && nb <= 9)
+		count += ft__putchar_fd((nb + 48), fd);
+	return (count);
+}

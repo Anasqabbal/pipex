@@ -1,6 +1,6 @@
 NAME = pipex
 CC = cc
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror
 FILESM = pipex.c path.c exec.c
 OFILES = $(FILESM:.c=.o)
 LIB = lib

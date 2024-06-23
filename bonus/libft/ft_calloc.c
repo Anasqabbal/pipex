@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anqabbal <anqabbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 16:11:06 by anqabbal          #+#    #+#             */
-/*   Updated: 2024/06/22 18:14:35 by anqabbal         ###   ########.fr       */
+/*   Created: 2023/11/02 15:40:04 by anqabbal          #+#    #+#             */
+/*   Updated: 2023/12/16 10:12:36 by anqabbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include "./libft/libft.h"
-# include <stdio.h>
+#include "libft.h"
 
-typedef struct s_p
+void	*ft_calloc(size_t count, size_t size)
 {
-	int		pid;
-	int		fd[2];
-	int		fd0;
-	int		fd1;
-	char	**env;
-	char	**av;
-	int		ac;
-}	t_p;
+	void	*arr;
 
-int		creat_open_file(char *f1, int ind);
-char	*check__path(char *cmd, char **env);
-void	close_files(t_p *e);
-void	do_command(char *cmd, char **env, t_p *e);
-#endif
+	if (((int)count < 0 && (int)size < 0))
+		return (0);
+	arr = malloc(size * count);
+	if (!arr)
+		return (0);
+	ft_bzero(arr, count * size);
+	return (arr);
+}
