@@ -1,2 +1,0 @@
-[ ] check the included badges and link attached to it
-[ ] check the content of the file and the headers
